@@ -62,7 +62,7 @@ export function ResearchPage() {
           <textarea
             id="research-topic"
             className="topic-input"
-            placeholder="e.g. Analyze the key trends shaping the SaaS market in 2024, including growth drivers, challenges, and emerging opportunities…"
+            placeholder="e.g. Analyze the key trends shaping the SaaS market in 2026, including growth drivers, challenges, and emerging opportunities…"
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
           />

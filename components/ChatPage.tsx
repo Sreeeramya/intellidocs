@@ -72,7 +72,7 @@ export function ChatPage() {
               <span />
             </div>
             <div className="user-message">
-              <div className="user-avatar">JD</div>
+              <div className="user-avatar">SR</div>
               <div>
                 <div className="message-meta">
                   <b>You</b>
@@ -125,7 +125,7 @@ export function ChatPage() {
                     <span>· p.12</span>
                   </button>
                   <button className="citation" onClick={() => setSource(true)}>
-                    <FileText size={12} /> 2024 Annual Report.pdf{" "}
+                    <FileText size={12} /> 2026 Annual Report.pdf{" "}
                     <span>· p.28</span>
                   </button>
                 </div>
@@ -153,7 +153,7 @@ export function ChatPage() {
             </div>
             {sent && (
               <div className="user-message new-message">
-                <div className="user-avatar">JD</div>
+                <div className="user-avatar">SR</div>
                 <div>
                   <div className="message-meta">
                     <b>You</b>
@@ -247,7 +247,7 @@ export function ChatPage() {
             <div className="source-file">
               <span className="pdf-icon">PDF</span>
               <div>
-                <b>2024 Annual Report</b>
+                <b>2026 Annual Report</b>
                 <small>Page 28 · Paragraph 1</small>
               </div>
               <ChevronRight size={14} />
