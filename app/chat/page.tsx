@@ -1,3 +1,5 @@
-import IntelliDocs from "@/components/intellidocs"
+import { ChatPage } from "@/components/ChatPage";
 
-export default function ChatPage() { return <IntelliDocs page="chat" /> }
+export default function Page() {
+  return <ChatPage />;
+}

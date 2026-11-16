@@ -1,3 +1,5 @@
-import IntelliDocs from "@/components/intellidocs"
+import { SettingsPage } from "@/components/SettingsPage";
 
-export default function SettingsPage() { return <IntelliDocs page="settings" /> }
+export default function Page() {
+  return <SettingsPage />;
+}
