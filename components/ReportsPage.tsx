@@ -15,28 +15,44 @@ import {
 import { PageHeading, StatusBadge } from "./shared";
 const reports = [
   {
-    title: "Q3 2024 Market Trends & Outlook",
-    date: "Oct 24, 2024",
+    title: "Q3 2026 Market Trends & Outlook",
+    date: "Nov 14, 2026",
     sources: 8,
     tag: "Market research",
+    sourceFiles: [
+      { name: "Q3 Market Analysis.pdf", pages: "12, 18, 26" },
+      { name: "2026 Annual Report.pdf", pages: "28, 44" },
+      { name: "Customer Retention Benchmark.pdf", pages: "6, 19" },
+    ],
   },
   {
     title: "Competitive Landscape Analysis",
-    date: "Oct 21, 2024",
+    date: "Nov 12, 2026",
     sources: 12,
     tag: "Competitive analysis",
+    sourceFiles: [
+      { name: "Competitor Landscape.pdf", pages: "4, 11, 17" },
+      { name: "Q3 Market Analysis.pdf", pages: "21, 30" },
+      { name: "2026 Annual Report.pdf", pages: "52, 68" },
+    ],
   },
   {
     title: "Customer Retention Benchmark",
-    date: "Oct 18, 2024",
+    date: "Nov 10, 2026",
     sources: 6,
     tag: "Benchmark",
+    sourceFiles: [
+      { name: "Customer Retention Benchmark.pdf", pages: "6, 14, 22" },
+      { name: "2026 Annual Report.pdf", pages: "31, 46" },
+      { name: "Q3 Market Analysis.pdf", pages: "9, 24" },
+    ],
   },
 ];
 
 export function ReportsPage() {
   const [selected, setSelected] = useState(0);
   const [reportsList, setReportsList] = useState(reports);
+  const [sourcesOpen, setSourcesOpen] = useState(false);
   return (
     <div className="content">
       <PageHeading
@@ -62,7 +78,10 @@ export function ReportsPage() {
             <button
               key={r.title}
               className={`report-item ${selected === i ? "report-selected" : ""}`}
-              onClick={() => setSelected(i)}
+              onClick={() => {
+                setSelected(i);
+                setSourcesOpen(false);
+              }}
             >
               <span className="report-icon">
                 <FileText size={17} />
@@ -177,8 +196,31 @@ export function ReportsPage() {
                   <b>{reportsList[selected].sources} verified sources</b> in
                   your document library.
                 </span>
-                <button onClick={() => {}}>View sources</button>
+                <button
+                  aria-expanded={sourcesOpen}
+                  onClick={() => setSourcesOpen((open) => !open)}
+                >
+                  {sourcesOpen ? "Hide sources" : "View sources"}
+                </button>
               </div>
+              {sourcesOpen && (
+                <ul
+                  className="mt-3 flex flex-col gap-2 border-t border-border pt-3"
+                  aria-label="Source PDFs and cited pages"
+                >
+                  {reportsList[selected].sourceFiles.map((source) => (
+                    <li
+                      key={source.name}
+                      className="flex items-center justify-between gap-4 text-[10px] text-muted-foreground"
+                    >
+                      <span className="font-medium text-foreground">
+                        {source.name}
+                      </span>
+                      <span>Pages {source.pages}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </article>
           ) : (
             <div className="empty-state">

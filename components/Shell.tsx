@@ -79,10 +79,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </Link>
           </div>
           <button className="profile">
-            <div className="avatar">JD</div>
+            <div className="avatar">SR</div>
             <span className="profile-copy">
-              <b>Jordan Davis</b>
-              <small>Pro workspace</small>
+              <b>Sreeramya</b>
+              <small>Personal workspace</small>
             </span>
             <MoreHorizontal size={18} />
           </button>

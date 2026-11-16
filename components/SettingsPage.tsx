@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Activity,
   Check,
@@ -13,12 +13,60 @@ import {
 } from "lucide-react";
 import { PageHeading, StatusBadge } from "./shared";
 
+const settingsStorageKey = "intellidocs-settings";
+const availableModels = [
+  "GPT-4o — Balanced and capable",
+  "Claude 3.5 Sonnet — Detailed analysis",
+  "GPT-4o mini — Faster responses",
+];
+
 export function SettingsPage() {
+  const [model, setModel] = useState(availableModels[0]);
   const [temperature, setTemperature] = useState(0.3);
   const [topK, setTopK] = useState(5);
   const [guardrails, setGuardrails] = useState(true);
   const [citations, setCitations] = useState(true);
+  const [workspaceName, setWorkspaceName] = useState("Personal workspace");
   const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(settingsStorageKey);
+      if (!stored) return;
+
+      const preferences: Record<string, unknown> = JSON.parse(stored);
+      if (
+        typeof preferences.model === "string" &&
+        availableModels.includes(preferences.model)
+      ) {
+        setModel(preferences.model);
+      }
+      if (
+        typeof preferences.temperature === "number" &&
+        Number.isFinite(preferences.temperature) &&
+        preferences.temperature >= 0 &&
+        preferences.temperature <= 1
+      ) {
+        setTemperature(preferences.temperature);
+      }
+      if (
+        typeof preferences.topK === "number" &&
+        Number.isInteger(preferences.topK) &&
+        preferences.topK >= 1 &&
+        preferences.topK <= 10
+      ) {
+        setTopK(preferences.topK);
+      }
+      if (typeof preferences.guardrails === "boolean") {
+        setGuardrails(preferences.guardrails);
+      }
+      if (typeof preferences.citations === "boolean") {
+        setCitations(preferences.citations);
+      }
+    } catch {
+      return;
+    }
+  }, []);
   return (
     <div className="content settings-content">
       <PageHeading
@@ -56,10 +104,14 @@ export function SettingsPage() {
               Language model
             </label>
             <div className="select-wrap">
-              <select id="model-choice">
-                <option>GPT-4o — Balanced and capable</option>
-                <option>Claude 3.5 Sonnet — Detailed analysis</option>
-                <option>GPT-4o mini — Faster responses</option>
+              <select
+                id="model-choice"
+                value={model}
+                onChange={(event) => setModel(event.target.value)}
+              >
+                {availableModels.map((option) => (
+                  <option key={option}>{option}</option>
+                ))}
               </select>
               <ChevronDown size={14} />
             </div>
@@ -164,6 +216,29 @@ export function SettingsPage() {
               </button>
             </div>
           </section>
+          <section className="panel settings-panel" id="workspace">
+            <div className="settings-title">
+              <span className="panel-icon blue">
+                <Activity size={17} />
+              </span>
+              <div>
+                <h2>Workspace</h2>
+                <p>Manage the name shown for this workspace.</p>
+              </div>
+            </div>
+            <label className="field-label" htmlFor="workspace-name">
+              Workspace name
+            </label>
+            <div className="select-wrap">
+              <input
+                id="workspace-name"
+                type="text"
+                value={workspaceName}
+                onChange={(event) => setWorkspaceName(event.target.value)}
+                aria-label="Workspace name"
+              />
+            </div>
+          </section>
           <div className="save-row">
             {saved && (
               <span className="saved-label">
@@ -173,8 +248,22 @@ export function SettingsPage() {
             <button
               className="primary-button"
               onClick={() => {
-                setSaved(true);
-                setTimeout(() => setSaved(false), 2500);
+                try {
+                  localStorage.setItem(
+                    settingsStorageKey,
+                    JSON.stringify({
+                      model,
+                      temperature,
+                      topK,
+                      guardrails,
+                      citations,
+                    }),
+                  );
+                  setSaved(true);
+                  window.setTimeout(() => setSaved(false), 2500);
+                } catch {
+                  setSaved(false);
+                }
               }}
             >
               <Check size={15} /> Save changes

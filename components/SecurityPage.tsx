@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   ArrowUpRight,
   CheckCircle2,
   ChevronDown,
-  Filter,
   Gauge,
   LockKeyhole,
   MoreHorizontal,
@@ -54,6 +54,12 @@ const events = [
 ];
 
 export function SecurityPage() {
+  const [categoryFilter, setCategoryFilter] = useState("All categories");
+  const filteredEvents =
+    categoryFilter === "All categories"
+      ? events
+      : events.filter((event) => event.type === categoryFilter);
+
   return (
     <div className="content">
       <PageHeading
@@ -61,10 +67,10 @@ export function SecurityPage() {
         title="Security center"
         sub="Monitor protection activity across your workspace."
         action={
-          <button className="outline-button">
+          <Link href="/settings#safety" className="outline-button no-underline">
             <LockKeyhole size={14} /> Security settings{" "}
             <ArrowUpRight size={13} />
-          </button>
+          </Link>
         }
       />
       <div className="stats-grid">
@@ -218,9 +224,20 @@ export function SecurityPage() {
           <h2>Blocked events</h2>
           <p>Requests automatically stopped by your guardrails</p>
         </div>
-        <button className="subtle-button">
-          <Filter size={14} /> Filter <ChevronDown size={14} />
-        </button>
+        <label className="filter-select subtle-button">
+          <span className="sr-only">Filter blocked events by category</span>
+          <select
+            value={categoryFilter}
+            onChange={(event) => setCategoryFilter(event.target.value)}
+            aria-label="Filter blocked events by category"
+          >
+            <option>All categories</option>
+            <option>Prompt injection</option>
+            <option>PII request</option>
+            <option>Policy bypass</option>
+          </select>
+          <ChevronDown size={14} />
+        </label>
       </div>
       <div className="table-card">
         <table>
@@ -236,8 +253,8 @@ export function SecurityPage() {
             </tr>
           </thead>
           <tbody>
-            {events.map((e, i) => (
-              <tr key={i}>
+            {filteredEvents.map((e) => (
+              <tr key={e.type}>
                 <td>
                   <div className="event-prompt">
                     <span className="blocked-mark">
@@ -263,11 +280,11 @@ export function SecurityPage() {
             ))}
           </tbody>
         </table>
-        {events.length === 0 && (
+        {filteredEvents.length === 0 && (
           <div className="empty-state">
             <ShieldCheck size={22} />
-            <b>No blocked events</b>
-            <p>Security events will appear here when detected.</p>
+            <b>No blocked events match this category</b>
+            <p>Try a different category to see more security events.</p>
           </div>
         )}
       </div>
