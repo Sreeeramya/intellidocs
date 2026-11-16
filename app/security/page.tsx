@@ -1,3 +1,5 @@
-import IntelliDocs from "@/components/intellidocs"
+import { SecurityPage } from "@/components/SecurityPage";
 
-export default function SecurityPage() { return <IntelliDocs page="security" /> }
+export default function Page() {
+  return <SecurityPage />;
+}

@@ -1,3 +1,5 @@
-import IntelliDocs from "@/components/intellidocs"
+import { ReportsPage } from "@/components/ReportsPage";
 
-export default function ReportsPage() { return <IntelliDocs page="reports" /> }
+export default function Page() {
+  return <ReportsPage />;
+}
